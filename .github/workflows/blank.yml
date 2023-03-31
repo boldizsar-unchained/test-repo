@@ -10,4 +10,6 @@ jobs:
       MY_SECRET: ${{ secrets.TEST }}
     steps:
       - name: Test secret
-        run: echo $MY_SECRET
+        run: |
+          echo "$MY_SECRET" >> .env
+          cat .env
