@@ -13,3 +13,5 @@ jobs:
         run: |
           echo "$MY_SECRET" >> .env
           cat .env
+          echo "$TEST" >> .env.dev
+          cat .env.dev
