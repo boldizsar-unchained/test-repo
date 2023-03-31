@@ -1,0 +1,13 @@
+name: Test Secrets
+
+on:
+  push:
+
+jobs:
+  test-secrets:
+    runs-on: ubuntu-latest
+    env:
+      MY_SECRET: ${{ secrets.TEST }}
+    steps:
+      - name: Test secret
+        run: echo $MY_SECRET
