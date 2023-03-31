@@ -4,14 +4,12 @@ on:
   push:
 
 jobs:
-  test-secrets:
+  deploy_functions:
     runs-on: ubuntu-latest
-    env:
-      MY_SECRET: ${{ secrets.TEST }}
     steps:
-      - name: Test secret
+      - name: Set env vars
         run: |
           echo "$MY_SECRET" >> .env
           cat .env
-          echo "$TEST" >> .env.dev
-          cat .env.dev
+        env:
+          MY_SECRET: ${{ secrets.TEST }}
