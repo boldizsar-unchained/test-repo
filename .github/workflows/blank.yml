@@ -1,15 +1,28 @@
-name: Release test
+name: Echo Changed Folders on Release
 
 on:
   release:
-    types: [published]
+    types:
+      - created
 
 jobs:
-  deploy-release:
+  echo_changed_folders:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Test
+      - name: Check out repository
+        uses: actions/checkout@v2
+      
+      - name: List Changed Folders
         run: |
-          echo ${{ github.event.release.tag_name }}
-          echo ${{ github.event.release.body }} >> body.txt
-          cat body.txt
+          # Get the SHA of the previous release (if available)
+          PREVIOUS_RELEASE_SHA=$(git rev-list --tags --max-count=1)
+          
+          # Get the SHA of the current release
+          CURRENT_RELEASE_SHA=$(git rev-parse HEAD)
+
+          # Get the list of changed folders between the previous and current release
+          CHANGED_FOLDERS=$(git diff --name-only $PREVIOUS_RELEASE_SHA $CURRENT_RELEASE_SHA | xargs -I {} dirname {} | sort | uniq)
+
+          echo "Changed folders in this release:"
+          echo "$CHANGED_FOLDERS"
