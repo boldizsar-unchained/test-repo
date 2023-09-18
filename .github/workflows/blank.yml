@@ -1,4 +1,8 @@
-name: Test Secrets
+name: Release test
+
+on:
+  release:
+    types: [published]
 
 on:
   push:
@@ -7,10 +11,7 @@ jobs:
   deploy_functions:
     runs-on: ubuntu-latest
     steps:
-      - name: Set env vars
-        working-directory: packages/functions
+      - name: Set env varsx
         run: |
-          echo "$MY_SECRET" >> .env
-          cat .env
-        env:
-          MY_SECRET: ${{ secrets.TEST }}
+          echo ${{ github.event.release.tag_name }}
+          echo ${{ github.event.release.body }}
