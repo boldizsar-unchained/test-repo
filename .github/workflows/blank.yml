@@ -4,14 +4,11 @@ on:
   release:
     types: [published]
 
-on:
-  push:
-
 jobs:
-  deploy_functions:
+  deploy-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Set env varsx
+      - name: Test
         run: |
           echo ${{ github.event.release.tag_name }}
           echo ${{ github.event.release.body }}
