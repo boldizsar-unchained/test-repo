@@ -1,28 +1,24 @@
-name: Echo Changed Folders on Release
+name: PG migration
 
-on:
-  release:
-    types:
-      - created
+on: pull_request
 
 jobs:
-  echo_changed_folders:
+  migrate_pg:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-      
-      - name: List Changed Folders
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+      - uses: mattes/gce-cloudsql-proxy-action@v1
+        with:
+          creds: '${{ secrets.GCP_CREDENTIALS }}'
+          instance: buildcore-test:us-central1:buildcore-test
+      - name: RUn
         run: |
-          # Get the SHA of the previous release (if available)
-          PREVIOUS_RELEASE_SHA=$(git rev-list --tags --max-count=1)
-          
-          # Get the SHA of the current release
-          CURRENT_RELEASE_SHA=$(git rev-parse HEAD)
-
-          # Get the list of changed folders between the previous and current release
-          CHANGED_FOLDERS=$(git diff --name-only $PREVIOUS_RELEASE_SHA $CURRENT_RELEASE_SHA | xargs -I {} dirname {} | sort | uniq)
-
-          echo "Changed folders in this release:"
-          echo "$CHANGED_FOLDERS"
+          npm i
+          npm run build 
+          npm run start
