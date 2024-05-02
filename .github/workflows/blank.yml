@@ -17,8 +17,8 @@ jobs:
         with:
           creds: '${{ secrets.GCP_CREDENTIALS }}'
           instance: buildcore-test:us-central1:buildcore-test
-      name: RUn
-      run: |
+      - name: RUn
+        run: |
           npm i
           npm run build 
           npm run start
